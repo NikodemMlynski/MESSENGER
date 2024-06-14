@@ -1,0 +1,25 @@
+.appContainer{
+    background-color: #222;
+  }
+  .navigation ul{
+    width: 100%;
+    display: flex;
+    padding: 2rem;
+    list-style-type: none;
+    justify-content: space-around;
+    border-bottom: 1px solid gray;
+  }
+  .navigation ul li{
+    display: block;
+  }
+  .navigation ul li a{
+    text-align: center;
+    text-decoration: none;
+    display: black;
+    padding: 0.5rem 1rem;
+    width: 50%;
+    font-size: 20px;
+  }
+  .navigation ul li a:hover{
+    color: pink;
+  }

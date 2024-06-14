@@ -1,0 +1,62 @@
+.messagesContainer{
+    width: 78%;
+    background-color: #222;
+    border-radius: 1rem;
+    /* padding: 1rem; */
+}
+
+.nav{
+    background-color: #444;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    padding: 0.5rem 1rem;
+}
+.messages{
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+.messages div{
+    display: flex;
+}
+.yourMessage{
+    justify-content: flex-end;
+}
+.friendMessage{
+    justify-content: flex-start;
+}
+
+
+.messages section{
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    gap: 0.3rem;
+}
+.messages section p{
+    background: linear-gradient(to bottom right, rgb(0, 70, 230), rgb(138, 16, 138));
+    box-shadow: 0 0 3px 1px rgba(0, 70, 230, 0.2);
+    font-size: 20px;
+    padding: 0.4rem 1.3rem;
+    letter-spacing: 0.03rem;
+    border-radius: 1.1rem;
+    display: inline-block;
+}
+.date_span{
+    display: flex;
+    gap: 0.7rem;
+    font-size: 12px;
+    text-align: left;
+    margin: 0 1.2rem;
+    opacity: 0.7;
+    letter-spacing: 0.05rem;
+    word-spacing: -0.12rem;
+}
+.date_span span{
+    word-spacing: 0.1rem;
+}
+.yourMessage section span{
+    text-align: right;
+}

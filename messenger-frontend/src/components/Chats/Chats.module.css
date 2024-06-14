@@ -1,0 +1,11 @@
+.chats{
+    border-radius: 1rem;
+    padding: 0.5rem 0;
+    width: 20%;
+    background-color: #222;
+}
+
+.chats ul{
+    list-style-type: none;
+}
+
