@@ -36,6 +36,7 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
 
     useEffect(() => {
         async function getMessagesForChat() {
+            if(!chatId) return;
             const res = await fetch(`${URL}messages/chat/${chatId}`, {
                 headers: {
                     'Authorization': `Bearer ${NikodemToken}`

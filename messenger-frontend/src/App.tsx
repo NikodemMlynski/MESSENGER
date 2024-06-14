@@ -2,6 +2,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom"
 import RootLayout from "./Layouts/RootLayout";
 import ChatPage from "./pages/ChatPage";
 import FriendsPage from "./pages/FriendsPage";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
 
 
 const router = createBrowserRouter([
@@ -37,12 +39,12 @@ const router = createBrowserRouter([
         ]
       },
       {
-        path: 'login',
-        element: <h1>Tu bedzie strona logowania</h1>
+        path: 'signin',
+        element: <SignInPage/>
       },
       {
         path: 'signup',
-        element: <h1>Tu bedzie tworzenie konta</h1>
+        element: <SignUpPage/>
       }
     ]
   }

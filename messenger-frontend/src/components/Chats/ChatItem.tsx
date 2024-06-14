@@ -6,8 +6,10 @@ import classes from './ChatItem.module.css';
 
 const ChatItem: FC<IChat> = ({_id, users, lastMessage}) => {
     const {chatId} = useParams();
+    const loggedUser = JSON.parse(localStorage.getItem('authData') as string);
+    console.log(loggedUser);
     // "66683a3dbd86f63e2928ee3a"
-    const user = users.find(user => user._id !== '66683a3dbd86f63e2928ee3a')
+    const user = users.find(user => user._id !== loggedUser._id)
     return (
         <li className={classes.chatItem}>
             <Link to={`/chats/${_id}`}>

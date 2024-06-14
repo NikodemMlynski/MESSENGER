@@ -6,12 +6,13 @@ import ChatItem from "./ChatItem";
 
 const Chats: FC = () => {
     const [chats, setChats] = useState<IChat[]>([]);
+    const loggedUser = JSON.parse(localStorage.getItem('authData') as string);
 
     useEffect(() => {
         async function getChats() {
             const res = await fetch(`${URL}chats/users`, {
                 headers: {
-                    'Authorization': `Bearer ${NikodemToken}`
+                    'Authorization': `Bearer ${loggedUser.token}`
                 }
             });
             if(!res.ok) throw new Error('Failed to fetch chats data');
