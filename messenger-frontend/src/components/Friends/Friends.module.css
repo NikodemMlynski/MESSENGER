@@ -1,0 +1,21 @@
+.main{
+    display: flex;
+    padding: 2rem 0.5rem;
+    gap: 1rem
+}
+.main section{
+    width: 50%;
+    
+}
+.main section h2{
+    font-size: 25px;
+    text-align: center;
+    padding: 0.5rem;
+}
+.main section ul{
+    background-color: #444;
+    border-radius: 0.5rem;
+    list-style-type: none;
+}
+
+

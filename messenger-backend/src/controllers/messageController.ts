@@ -53,13 +53,13 @@ export const getMessagesForUser = catchAsync(async (req: Request, res: Response,
 export const getMessagesInChat = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {chatId} = req.params;
     const messagesInChat = await Message.find({chatId});
-    // if(!req.user) return next(new AppError('log in', 401));
     const userId = req.user?._id as ObjectId;
-    
-    if(messagesInChat.length === 0) {
-        res.status(200).json({
+   
+    if(messagesInChat.length < 1) {
+        return res.status(200).json({
             status: 'success',
-            messages: []
+            yourMessages: [],
+            friendMessages: [],
         })
     }
 

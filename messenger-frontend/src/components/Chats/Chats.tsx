@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import IChat from "../../types/chatType";
-import { NikodemToken, URL } from "../../assets/utils";
+import { URL } from "../../assets/utils";
 import classes from './Chats.module.css';
 import ChatItem from "./ChatItem";
 

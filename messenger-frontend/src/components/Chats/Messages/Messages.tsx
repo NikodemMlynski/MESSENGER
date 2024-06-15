@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import classes from './Messages.module.css';
 import IMessage from "../../../types/messageType";
 import { NikodemToken, URL, months } from "../../../assets/utils";
+import { ILoggedUser } from "../../../types/userType";
 
 interface MessagesProps {
     chatId: string;
@@ -14,6 +15,7 @@ interface IMessagesInChat {
 
 const Messages: FC<MessagesProps> = ({ chatId }) => {
     const [messagesForChat, setMessagesForChat] = useState<IMessage[]>([]);
+    const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
 
     const sortMessagesByDate = (messages: IMessage[]) => {
         return messages.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
@@ -21,7 +23,6 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
 
     const handleChangeMessages = (yourMessages: IMessage[], friendMessages: IMessage[]) => {
         let allMessages: IMessage[] = [];
-        
         if (friendMessages.length > 0 && yourMessages.length > 0) {
             allMessages = [...yourMessages, ...friendMessages];
         } else if (friendMessages.length > 0) {
@@ -39,13 +40,13 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             if(!chatId) return;
             const res = await fetch(`${URL}messages/chat/${chatId}`, {
                 headers: {
-                    'Authorization': `Bearer ${NikodemToken}`
+                    'Authorization': `Bearer ${loggedUser.token}`
                 }
             });
             if (!res.ok) throw new Error('Failed to fetch messages for this chat');
             const resData: IMessagesInChat = await res.json();
             console.log(resData);
-
+            
             const updatedYourMessages = resData.yourMessages.map(yMsg => {
                 yMsg['isYourMessage'] = true;
                 return yMsg;
@@ -54,7 +55,7 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             handleChangeMessages(updatedYourMessages, resData.friendMessages);
         }
         getMessagesForChat();
-    }, [chatId]);
+    }, [chatId, loggedUser.token]);
 
     console.log(messagesForChat);
 

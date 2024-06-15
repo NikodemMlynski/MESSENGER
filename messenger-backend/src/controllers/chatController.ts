@@ -10,6 +10,23 @@ export const createChat = async (user1Id: string, user2Id: string) => {
     const createdValue = Chat.create({users});
     return createdValue;
 }
+export const deleteChat = async (user1Id: string, user2Id: string) => {
+    const users = [user1Id, user2Id];
+    
+    try {
+        const result = await Chat.findOneAndDelete({
+            users: { $all: users }
+        });
+
+        if (result) {
+            console.log('Chat deleted successfully:', result);
+        } else {
+            console.log('No chat found for the given users.');
+        }
+    } catch (error) {
+        console.error('Error deleting chat:', error);
+    }
+};
 
 export const getAllChatsForUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const chatsForUser = await Chat.find({users: { $all: [req.user?._id]}}).populate({

@@ -2,12 +2,14 @@ import { FC, FormEvent } from "react";
 import InputContainer from "../../assets/InputContainer";
 import classes from './SignUp.module.css'
 import { URL } from "../../assets/utils";
+import { useNavigate } from "react-router-dom";
 interface ISignedUser {
     email: string;
     password: string;
 }
 
 const SignIn: FC = () => {
+    const navigate = useNavigate();
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement
@@ -40,6 +42,7 @@ const SignIn: FC = () => {
             }
             localStorage.setItem('authData', JSON.stringify(userData));
             const user = localStorage.getItem('authData');
+            navigate('/chats');
             console.log(user);
         } catch (error) {
             console.log(error);

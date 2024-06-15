@@ -1,13 +1,30 @@
 .appContainer{
     background-color: #222;
   }
+  .navigation {
+    border-bottom: 1px solid gray;
+    display: flex;
+  }
+  .navigation header{
+    width: 20%;
+    border-right: 1px solid #555;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .navigation header img{
+    box-shadow: 1px 1px 3px 1px #555;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
   .navigation ul{
     width: 100%;
     display: flex;
     padding: 2rem;
     list-style-type: none;
     justify-content: space-around;
-    border-bottom: 1px solid gray;
   }
   .navigation ul li{
     display: block;

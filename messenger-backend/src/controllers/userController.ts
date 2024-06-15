@@ -4,7 +4,7 @@ import { catchAsync } from "../utils/catchAsync";
 import { deleteOne, getAll, getOne, updateOne } from "./handlerFactory";
 import { AppError } from "../utils/appError";
 import { ObjectId } from "mongoose";
-import { createChat, getAllChatsForUser } from "./chatController";
+import { createChat, deleteChat, getAllChatsForUser } from "./chatController";
 import Chat from "../models/Chat";
 
 export const getAllUsers = getAll(User, 'users');
@@ -56,6 +56,8 @@ export const deleteFriend = catchAsync(async (req: Request, res: Response, next:
     const updatedUser1 = await User.findByIdAndUpdate(id, {friends: updatedFriends1});
     const updatedUser2 = await User.findByIdAndUpdate(friendId, {friends: updatedFriends2})
 
+    deleteChat(id, friendId);
+    
     res.status(200).json({
         status: 'success',
         updatedUser1,

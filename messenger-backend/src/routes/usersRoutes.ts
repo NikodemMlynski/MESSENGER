@@ -26,7 +26,9 @@ router
 .route('/not-in-friends')
 .get(getAllNotInFriends)
 
-
+router
+.route('/:id/friends/:friendId')
+.patch(addFriend);
 
 router
 .route('/:id')
@@ -34,9 +36,7 @@ router
 .get(getUser)
 .delete(deleteUser)
 
-router
-.route('/:id/friends/:friendId')
-.patch(addFriend);
+
 
 router
 .route('/:id/friends/:friendId/delete')
