@@ -1,5 +1,5 @@
 import { FC } from "react";
-import hamburger from './../../images/hamburger.png';
+import user_photo from './../../images/user-photo.png';
 import IChat from "../../types/chatType";
 import { Link } from "react-router-dom";
 import classes from './ChatItem.module.css';
@@ -14,7 +14,7 @@ const ChatItem: FC<IChat> = ({_id, users}) => {
         <li className={classes.chatItem}>
             <Link to={`/chats/${_id}`}>
                 <div className={classes.imageContainer}>
-                    <img src={hamburger} alt="" />
+                    <img src={user_photo} alt="" />
 
                 </div>
 

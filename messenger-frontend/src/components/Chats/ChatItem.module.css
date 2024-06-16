@@ -18,6 +18,7 @@
 }
 .chat_user_info strong {
     text-indent: 0.5rem;
+    color: rgb(180 230, 255);
 }
 .messages {
     text-align: center;

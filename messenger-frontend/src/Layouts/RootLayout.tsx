@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
-
+import user_photo from './../images/user-photo.png'
 import classses from './RootLayout.module.css';
 
 const RootLayout: FC = () => {
@@ -25,7 +25,7 @@ const RootLayout: FC = () => {
         <div className={classses.appContainer}>
             <nav className={classses.navigation}>
                 <header>
-                    <img src="" alt="" />
+                    <img src={user_photo} alt="" />
                     <h2 onClick={handleLogOut}>{actualLoggedUser?.username}</h2>
                 </header>
                 <ul>

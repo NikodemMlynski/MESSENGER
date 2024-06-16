@@ -53,6 +53,11 @@ export const getMessagesForUser = catchAsync(async (req: Request, res: Response,
 export const getMessagesInChat = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const {chatId} = req.params;
     const messagesInChat = await Message.find({chatId});
+    const chat = await Chat.findById(chatId).select('users').populate({
+        path: 'users',
+        select: 'username'
+    })
+    const users = chat?.users;
     const userId = req.user?._id as ObjectId;
    
     if(messagesInChat.length < 1) {
@@ -60,6 +65,7 @@ export const getMessagesInChat = catchAsync(async (req: Request, res: Response, 
             status: 'success',
             yourMessages: [],
             friendMessages: [],
+            users
         })
     }
 
@@ -80,7 +86,8 @@ export const getMessagesInChat = catchAsync(async (req: Request, res: Response, 
         numberOfYourMessages: yourMessages.length,
         numberOfFriendMessages: friendMessages.length,
         yourMessages,
-        friendMessages
+        friendMessages,
+        users
     })
 });
 

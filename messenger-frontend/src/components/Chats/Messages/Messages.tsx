@@ -1,21 +1,33 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import classes from './Messages.module.css';
 import IMessage from "../../../types/messageType";
-import { NikodemToken, URL, months } from "../../../assets/utils";
+import { URL } from "../../../assets/utils";
 import { ILoggedUser } from "../../../types/userType";
+import MessageItem from "./MessageItem";
 
 interface MessagesProps {
     chatId: string;
 }
-
+interface IUserInMessage{
+    _id: string;
+    username: string;
+}
 interface IMessagesInChat {
     yourMessages: IMessage[];
     friendMessages: IMessage[];
+    users: IUserInMessage[];
 }
 
 const Messages: FC<MessagesProps> = ({ chatId }) => {
     const [messagesForChat, setMessagesForChat] = useState<IMessage[]>([]);
     const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
+    const [messageData, setMessageData] = useState({
+        receiver: {
+            id: '',
+            username: ''
+        },
+        message: '',
+    });
 
     const sortMessagesByDate = (messages: IMessage[]) => {
         return messages.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
@@ -45,7 +57,13 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             });
             if (!res.ok) throw new Error('Failed to fetch messages for this chat');
             const resData: IMessagesInChat = await res.json();
-            console.log(resData);
+            const findedReceiver = resData.users.find(u => u._id !== loggedUser.id);
+            setMessageData(prevState => ({
+                ...prevState,
+                receiver: findedReceiver
+                  ? { id: findedReceiver._id, username: findedReceiver.username }
+                  : { id: '', username: '' }, // Set default values if not found
+              }));
             
             const updatedYourMessages = resData.yourMessages.map(yMsg => {
                 yMsg['isYourMessage'] = true;
@@ -57,32 +75,57 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
         getMessagesForChat();
     }, [chatId, loggedUser.token]);
 
+    const handleChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
+        setMessageData(prevState => ({...prevState, ['message']: e.target?.value}));
+    }
+    const handleSendMessage = () => {
+        if(messageData.message.trim().length === 0) return;
+        sendMessageDB(messageData.message, messageData.receiver.id);
+        const messageObj: IMessage = {
+            _id: (Math.random()*10).toString(),
+            chatId: chatId,
+            sender: loggedUser.id,
+            receiver: messageData.receiver.id,
+            time: new Date(),
+            read: false,
+            isYourMessage: true,
+            content: messageData.message
+        }
+        setMessagesForChat(prevState => [...prevState, messageObj]);
+        setMessageData(prevState => ({...prevState, ['message']: ''}))
+    }
+    const sendMessageDB = async (content: string, receiverId: string) => {
+        try {
+            const res = await fetch(`${URL}messages/user/${receiverId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
+                },
+                body: JSON.stringify({content})
+            })
+            if(!res.ok) throw new Error('Failed to send message');
+            const resData = await res.json();
+            console.log(resData);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     console.log(messagesForChat);
-
     return (
         <main className={classes.messagesContainer}>
             <nav className={classes.nav}>
-                <h3>Username</h3>
+                <h3>{messageData.receiver.username}</h3>
             </nav>
             <article className={classes.messages}>
                 {
-                    messagesForChat.map(message => {
-                const hours = `${new Date(message.time).getHours()}`.padStart(2, '0');
-                const minutes = `${new Date(message.time).getMinutes()}`.padStart(2, '0');
-                const date = new Date(message.time).getDate();
-                const month = months[new Date(message.time).getMonth()];
-                return (
-                        
-                    <div key={message._id} className={message.isYourMessage ? classes.yourMessage : classes.friendMessage}>
-                        <section key={message._id}>
-                            <p>{message.content}</p>
-                            <span className={classes.date_span}><span>{` ${date} ${month}`}</span>{`${hours} : ${minutes}`}</span>
-                        </section>
-                    </div>
-                )
-                    })
+                    messagesForChat.map(message => <MessageItem key={message._id} message={message}/>)
                 }
             </article>
+            <section className={classes.messageForm}>
+                <input type="text" placeholder="Aa" value={messageData.message} onChange={handleChangeMessage}/>
+                <button onClick={handleSendMessage}>Wyślij</button>
+            </section>
         </main>
     );
 }

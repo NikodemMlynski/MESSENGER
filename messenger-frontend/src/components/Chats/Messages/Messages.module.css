@@ -2,6 +2,9 @@
     width: 78%;
     background-color: #222;
     border-radius: 1rem;
+    position: relative;
+    height: 83.96vh;
+    
     /* padding: 1rem; */
 }
 
@@ -20,43 +23,54 @@
 .messages div{
     display: flex;
 }
-.yourMessage{
-    justify-content: flex-end;
-}
-.friendMessage{
-    justify-content: flex-start;
-}
 
 
-.messages section{
-    padding: 0.5rem;
+
+
+
+.messageForm{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    gap: 0.3rem;
+    gap: 2rem;
+    justify-content: center;
+    padding: 0.5rem 3rem;
+    align-items: center;
+    background-color: #111;
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
 }
-.messages section p{
-    background: linear-gradient(to bottom right, rgb(0, 70, 230), rgb(138, 16, 138));
-    box-shadow: 0 0 3px 1px rgba(0, 70, 230, 0.2);
-    font-size: 20px;
-    padding: 0.4rem 1.3rem;
+.messageForm input{
+    width: 80%;
+    font-size: 17px;
+    background-color: #555;
+    border: 0;
+    border-radius: 1rem;
+    padding: 0.4rem 1rem;
     letter-spacing: 0.03rem;
-    border-radius: 1.1rem;
-    display: inline-block;
+    opacity: 0.8;
 }
-.date_span{
-    display: flex;
-    gap: 0.7rem;
-    font-size: 12px;
-    text-align: left;
-    margin: 0 1.2rem;
+.messageForm input:focus{
+    outline: 0;
+    opacity: 1;
+}
+.messageForm button{
+    width: 90px;
+    height: 33px;
+    background-color: rgba(0, 70, 230, 0.6);
+    border-radius: 1rem;
+    border: 0;
+    box-shadow: 2px 2px 3px 1px rgba(0, 50, 180, 0.4);
+    cursor: pointer;
+}
+.messageForm button:hover{
+    box-shadow: 1px 1px 2px 1px rgba(0, 50, 180, 0.45);
+    transform: scale(0.97);
+    opacity: 0.8;
+}
+.messageForm button:active{
+    transform: scale(0.9);
     opacity: 0.7;
-    letter-spacing: 0.05rem;
-    word-spacing: -0.12rem;
-}
-.date_span span{
-    word-spacing: 0.1rem;
-}
-.yourMessage section span{
-    text-align: right;
 }

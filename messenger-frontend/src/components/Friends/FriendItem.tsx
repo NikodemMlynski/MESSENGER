@@ -2,6 +2,7 @@ import { FC } from 'react';
 import classes from './FriendItem.module.css';
 import { ILoggedUser, IUserGet } from '../../types/userType';
 import { URL } from '../../assets/utils';
+import user_photo from './../../images/user-photo.png'
 
 const FriendItem: FC<{
     user: IUserGet,
@@ -45,7 +46,7 @@ const FriendItem: FC<{
     }
     return (
         <li className={classes.friendItem}>
-            <img src={`../../images/${user.photo}`} alt="" />
+            <img src={user_photo} alt="" />
             <h3>{user.username}</h3>
             <p>{user.email}</p>
             {
