@@ -4,6 +4,8 @@ import IUser from "../models/userType";
 import { ObjectId } from "mongoose";
 import Chat from "../models/Chat";
 import { getAll, getOne } from "./handlerFactory";
+import User from "../models/User";
+import { AppError } from "../utils/appError";
 
 export const createChat = async (user1Id: string, user2Id: string) => {
     const users = [user1Id, user2Id]
@@ -29,10 +31,28 @@ export const deleteChat = async (user1Id: string, user2Id: string) => {
 };
 
 export const getAllChatsForUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    const chatsForUser = await Chat.find({users: { $all: [req.user?._id]}}).populate({
+    const userId = req.user?._id;
+    const searchUsername = req.query.username;
+
+    let chatQuery = {users: { $all: [userId]}}
+    if(searchUsername) {
+        const user = await User.findOne({ username: { $regex: searchUsername, $options: 'i' } }).select('_id');
+
+        if(!user) return next(new AppError('User not found', 404))
+        chatQuery = {
+            users: {$all: [userId, user._id]}
+        }
+    }
+
+    const chatsForUser = await Chat.find(chatQuery).populate([{
         path: 'users',
         select: 'username'
-    });
+    },
+    {
+        path: 'lastMessage',
+        select: 'content'
+    }
+    ]);
 
     res.status(200).json({
         status: 'success',

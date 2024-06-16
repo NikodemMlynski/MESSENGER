@@ -18,7 +18,7 @@
 }
 .chat_user_info strong {
     text-indent: 0.5rem;
-    color: rgb(180 230, 255);
+    color: rgb(180, 255, 220);
 }
 .messages {
     text-align: center;
@@ -38,5 +38,8 @@
     /* border: 1px solid white; */
 }
 .chatItem:hover{
-    opacity: 0.3;
+    opacity: 0.5;
+}
+.active{
+    background-color: rgb(0, 100, 50, 0.2);
 }

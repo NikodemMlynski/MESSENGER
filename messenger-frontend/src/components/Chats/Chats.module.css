@@ -9,3 +9,17 @@
     list-style-type: none;
 }
 
+.chats input {
+    padding: 0.3rem;
+    font-size: 18px;
+    background-color: rgba(180, 210, 190, 0.6);
+    border-radius: 0.3rem;
+    border: 0;
+    margin: 1rem auto;
+    display: block;
+}
+.chats input:focus{
+    outline: 0;
+    background-color: rgba(180, 210, 190, 0.8);
+
+}

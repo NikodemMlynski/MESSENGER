@@ -1,5 +1,6 @@
 import { Document, model, Schema } from "mongoose";
 import IMessage from "./messageType";
+import Chat from "./Chat";
 
 
 
@@ -31,6 +32,11 @@ const messageSchema = new Schema<IMessage>({
         type: Boolean,
         default: false
     }
+});
+
+messageSchema.post('save', async function(doc, next) {
+    await Chat.findByIdAndUpdate(doc.chatId, { lastMessage: doc._id });
+    next();
 });
 
 const Message = model<IMessage>('Message', messageSchema);

@@ -105,13 +105,10 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
                 body: JSON.stringify({content})
             })
             if(!res.ok) throw new Error('Failed to send message');
-            const resData = await res.json();
-            console.log(resData);
         } catch (error) {
             console.log(error);
         }
     }
-    console.log(messagesForChat);
     return (
         <main className={classes.messagesContainer}>
             <nav className={classes.nav}>
