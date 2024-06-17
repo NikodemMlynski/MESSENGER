@@ -4,6 +4,7 @@ import IChat from "../../types/chatType";
 import { NavLink } from "react-router-dom";
 import classes from './ChatItem.module.css';
 import { ILoggedUser } from "../../types/userType";
+import { truncateString } from "../../assets/utils";
 
 const ChatItem: FC<IChat> = ({_id, users, lastMessage}) => {
     // const {chatId} = useParams();
@@ -20,7 +21,7 @@ const ChatItem: FC<IChat> = ({_id, users, lastMessage}) => {
 
                 <p className={classes.chat_user_info}>
                     <strong>{user?.username}</strong>
-                    <span className={classes.messages}>{lastMessage?.content}</span>
+                    <span className={classes.messages}>{truncateString(lastMessage?.content ? lastMessage?.content : '')}</span>
                 </p>
                 
             </NavLink>

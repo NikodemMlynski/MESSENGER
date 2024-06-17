@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import classes from './Messages.module.css';
 import IMessage from "../../../types/messageType";
 import { URL } from "../../../assets/utils";
@@ -19,6 +19,7 @@ interface IMessagesInChat {
 }
 
 const Messages: FC<MessagesProps> = ({ chatId }) => {
+    const scrollableRef = useRef<HTMLDivElement>(null);
     const [messagesForChat, setMessagesForChat] = useState<IMessage[]>([]);
     const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
     const [messageData, setMessageData] = useState({
@@ -46,6 +47,15 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
         const sortedMessages = sortMessagesByDate(allMessages);
         setMessagesForChat(sortedMessages);
     };
+    useEffect(() => {
+        const element = scrollableRef.current; // Get the element
+        if (element) {
+          // Ensure scroll height calculation happens after content loads
+          setTimeout(() => {
+            element.scrollTop = element.scrollHeight;
+          }, 0); // Schedule for next render cycle
+        }
+      }, [chatId, messagesForChat]);
 
     useEffect(() => {
         async function getMessagesForChat() {
@@ -119,7 +129,7 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
                     messagesForChat.map(message => <MessageItem key={message._id} message={message}/>)
                 }
             </article>
-            <section className={classes.messageForm}>
+            <section className={classes.messageForm} ref={scrollableRef}>
                 <input type="text" placeholder="Aa" value={messageData.message} onChange={handleChangeMessage}/>
                 <button onClick={handleSendMessage}>Wyślij</button>
             </section>

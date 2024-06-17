@@ -10,6 +10,7 @@ const RootLayout: FC = () => {
     const [actualLoggedUser, setActualLoggeduser] = useState(loggedUser);
     
     useEffect(() => {
+        if(location.pathname === '/signup') return;
         if(!loggedUser?.token){
             navigate('/signin');
         }else {

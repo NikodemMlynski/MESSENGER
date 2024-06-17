@@ -13,6 +13,7 @@
     flex-direction: column;
     max-width: 500px;
     gap: 0.3rem;
+    position: relative;
 }
 .friendMessage section p, .yourMessage section p{
     box-shadow: 0 0 3px 1px rgba(0, 70, 230, 0.2);
@@ -21,6 +22,10 @@
     letter-spacing: 0.03rem;
     border-radius: 1.1rem;
     display: inline-block;
+    cursor: pointer;
+}
+.friendMessage section p:hover, .yourMessage section p:hover{
+    opacity: 0.8;
 }
 .yourMessage section p{
     background: linear-gradient(to bottom right, rgb(0, 70, 230), rgb(138, 16, 138));
