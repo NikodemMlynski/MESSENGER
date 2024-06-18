@@ -1,6 +1,6 @@
 .toolbox{
     display: flex;
-    height: 30px;
+    height: 34px;
     align-items: center;
     justify-content: center;
     background-color: #444;
@@ -10,11 +10,18 @@
     position: absolute;
     top: 0.7rem;
 }
+.toolbox button{
+    background-color: transparent;
+    border: 0;
+    align-items: center;
+    justify-content: center;
+}
 .toolbox_image{
-    width: 21px;
-    height: 21px;
+    width: 26px;
+    height: 26px;
     cursor: pointer;
 }
 .toolbox_image:hover{
     opacity: 0.5;
+    scale: 0.9;
 }

@@ -5,3 +5,6 @@
   box-sizing: border-box;
   color: white;
 }
+:root{
+  --main-green-color: #11D95A;
+}

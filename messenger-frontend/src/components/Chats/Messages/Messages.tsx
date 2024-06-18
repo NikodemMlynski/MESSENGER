@@ -104,6 +104,19 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
         setMessagesForChat(prevState => [...prevState, messageObj]);
         setMessageData(prevState => ({...prevState, ['message']: ''}))
     }
+
+    const handleDeleteMessage = (id: string) => {
+        setMessagesForChat(prevState => prevState.filter(message => message._id !== id));
+    }
+
+    const handleEditMessage = (id: string, content: string) => {
+        const messageIndex = messagesForChat.findIndex(m => m._id === id);
+        setMessagesForChat(prevState => {
+            prevState[messageIndex].content = content;
+            return [...prevState];
+        })
+    }
+
     const sendMessageDB = async (content: string, receiverId: string) => {
         try {
             const res = await fetch(`${URL}messages/user/${receiverId}`, {
@@ -126,7 +139,7 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             </nav>
             <article className={classes.messages}>
                 {
-                    messagesForChat.map(message => <MessageItem key={message._id} message={message}/>)
+                    messagesForChat.map(message => <MessageItem onDeleteMessage={handleDeleteMessage} onEditMessage={handleEditMessage} key={message._id} message={message}/>)
                 }
             </article>
             <section className={classes.messageForm} ref={scrollableRef}>

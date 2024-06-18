@@ -4,7 +4,7 @@ import classes from './MessageItem.module.css';
 import { months } from "../../../assets/utils";
 import MessageToolbox from "./MessageToolbox";
 
-const MessageItem: FC<{message: IMessage}> = ({message}) => {
+const MessageItem: FC<{message: IMessage; onDeleteMessage: (id: string) => void; onEditMessage: (id: string, content: string) => void }> = ({message, onDeleteMessage, onEditMessage}) => {
     {
         const [toolboxOpened, setToolboxOpened] = useState(false);
 
@@ -21,7 +21,7 @@ const MessageItem: FC<{message: IMessage}> = ({message}) => {
                 <section key={message._id}>
                     <p onClick={handleToolboxOpen}>{message.content}</p>
                     <span className={classes.date_span}><span>{` ${date} ${month}`}</span>{`${hours} : ${minutes}`}</span>
-                    <MessageToolbox messageId={message._id} isOpened={toolboxOpened} isYour={message.isYourMessage ?? false}/>
+                    <MessageToolbox onEditMessage={onEditMessage} onDeleteMessage={onDeleteMessage} messageId={message._id} isOpened={toolboxOpened} isYour={message.isYourMessage ?? false}/>
                 </section>
             </div>
         )
