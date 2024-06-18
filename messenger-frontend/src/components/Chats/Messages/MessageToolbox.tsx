@@ -12,23 +12,9 @@ const MessageToolbox: FC<
     messageId: string, isOpened: boolean,
     isYour: boolean,
     onDeleteMessage: (id: string) => void,
-    onEditMessage: (id: string, content: string) => void
-    }> = ({messageId, isOpened, isYour, onDeleteMessage, onEditMessage}) => {
+    openInput: () => void
+    }> = ({messageId, isOpened, isYour, onDeleteMessage, openInput}) => {
     const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
-
-    const editMessage = async (id: string, content: string) => {
-        const res = await fetch(`${URL}messages/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Authorization': `Bearer ${loggedUser.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({content})
-        })
-        if(!res.ok) throw new Error('Failed to edit this message');
-        const resData = await res.json();
-        console.log(resData);
-    }
 
     const deleteMessage = async (id: string) => {
         try {
@@ -47,10 +33,8 @@ const MessageToolbox: FC<
             console.log(error);
         }
     }
-    const handleEdit = (id: string) => {
-        alert('trzeba dodać jakiegoś inputa z możliwością wpisania contentu wiadomości, żeby można było wpisać coś dynamicznego')
-        onEditMessage(id, 'zmieniona wiadomosc');
-        editMessage(id, 'zmieniona wiadomosc');
+    const handleEdit = () => {
+        openInput();
     }
     const handleDelete = (id: string) => {
         onDeleteMessage(id);
@@ -59,13 +43,13 @@ const MessageToolbox: FC<
         // I have to also delete message in frontend in client side
     }
     const handleReact = (id: string, emojiType: emoji) => {
-        alert(id);
+        alert(id + `${emojiType}`);
 
     }
     const display = isOpened ? 'flex' : 'none';
     return (
         <div className={classes.toolbox} style={isYour ? {left: '-8.5rem', display: display} : {right: '-8.5rem', display: display}}>
-            <button onClick={() => handleEdit(messageId)}><img className={classes.toolbox_image} src={editIcon} alt="edit" /></button>
+            <button onClick={() => handleEdit()}><img className={classes.toolbox_image} src={editIcon} alt="edit" /></button>
             <button onClick={() => handleDelete(messageId)}><img className={classes.toolbox_image} src={deleteIcon} alt="delete" /></button>
             <button onClick={() => handleReact(messageId, 'happy')}><img className={classes.toolbox_image} src={emojiIcon} alt="emoji" /></button>
         </div>

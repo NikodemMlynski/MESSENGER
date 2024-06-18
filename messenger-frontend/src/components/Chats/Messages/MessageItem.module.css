@@ -15,7 +15,7 @@
     gap: 0.3rem;
     position: relative;
 }
-.friendMessage section p, .yourMessage section p{
+.friendMessage section p, .yourMessage section p, .editMessageForm{
     box-shadow: 0 0 3px 1px rgba(0, 70, 230, 0.2);
     font-size: 20px;
     padding: 0.4rem 1.3rem;
@@ -23,6 +23,33 @@
     border-radius: 1.1rem;
     display: inline-block;
     cursor: pointer;
+    position: relative;
+}
+.editMessageForm {
+    z-index: 99;
+    width: 400px;
+    position: absolute;
+    top: 0.4rem;
+    right: 2rem;
+    background-color: rgb(90, 115, 135);
+
+}
+.editMessageForm button{
+    background-color: var(--main-green-color);
+    font-size: 15px;
+    border: 0;
+    border-radius: 0.3rem;
+    padding: 0.1rem 0.2rem;
+}
+.editMessageForm input:focus{
+    outline: 0;
+}
+.editMessageForm input{
+    width: 90%;
+    background-color: transparent;
+    color: white;
+    border: 0;
+    font-size: 16px;
 }
 .friendMessage section p:hover, .yourMessage section p:hover{
     opacity: 0.8;
@@ -45,4 +72,7 @@
 }
 .yourMessage section span{
     text-align: right;
+}
+.editMessageForm{
+
 }
