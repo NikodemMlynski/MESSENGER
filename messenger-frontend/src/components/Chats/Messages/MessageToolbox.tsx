@@ -5,7 +5,7 @@ import deleteIcon from './../../../images/delete.png';
 import emojiIcon from './../../../images/happy.png';
 import { URL } from "../../../assets/utils";
 import { ILoggedUser } from "../../../types/userType";
-type emoji = 'happy' | 'sad' | 'angry' | 'sigma' | 'alcohol';
+type emoji = 'happy' | 'sad' | 'angry' | 'sigma';
 
 const MessageToolbox: FC<
     {
@@ -43,8 +43,25 @@ const MessageToolbox: FC<
         // I have to also delete message in frontend in client side
     }
     const handleReact = (id: string, emojiType: emoji) => {
-        alert(id + `${emojiType}`);
+        react(id, emojiType);
+    }
+    const react = async (id: string, emojiType: emoji) => {
+        try {
+            const res = await fetch(`${URL}messages/${id}`, {
+                method: 'PATCH',
+                body: JSON.stringify({react: emojiType}),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${loggedUser.token}`
+                }
+            });
+            if(!res.ok) throw new Error('Failed to react this message');
 
+            const resData = await res.json();
+            console.log(resData);
+        } catch (error) {
+            console.log(error);
+        }
     }
     const display = isOpened ? 'flex' : 'none';
     return (

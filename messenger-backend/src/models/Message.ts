@@ -31,6 +31,9 @@ const messageSchema = new Schema<IMessage>({
     read: {
         type: Boolean,
         default: false
+    },
+    react: {
+        type: String,
     }
 });
 

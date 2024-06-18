@@ -7,5 +7,6 @@ interface IMessage extends Document {
     content: string;
     time?: Date;
     read?: boolean;
+    react?: string;
 }
 export default IMessage;

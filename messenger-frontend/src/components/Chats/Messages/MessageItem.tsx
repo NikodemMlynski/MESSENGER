@@ -4,7 +4,17 @@ import classes from './MessageItem.module.css';
 import { URL, months } from "../../../assets/utils";
 import MessageToolbox from "./MessageToolbox";
 import { ILoggedUser } from "../../../types/userType";
+import sadIcon from './../../../images/emoticons/sad.png';
+import happyIcon from './../../../images/emoticons/happy.png';
+import angryIcon from './../../../images/emoticons/angry.png';
+import sigmaIcon from './../../../images/emoticons/sigma.png';
 
+const emoticons = {
+    sad: sadIcon,
+    happy: happyIcon,
+    angry: angryIcon,
+    sigma: sigmaIcon
+}
 const MessageItem: FC<{message: IMessage; onDeleteMessage: (id: string) => void; onEditMessage: (id: string, content: string) => void }> = ({message, onDeleteMessage, onEditMessage}) => {
     {
         const [toolboxOpened, setToolboxOpened] = useState(false);
@@ -52,7 +62,9 @@ const MessageItem: FC<{message: IMessage; onDeleteMessage: (id: string) => void;
                 
             <div key={message._id} className={message.isYourMessage ? classes.yourMessage : classes.friendMessage}>
                 <section key={message._id}>
-                    <p id="message" onClick={handleToolboxOpen}>{message.content}</p>
+                    <p id="message" onClick={handleToolboxOpen}>{message.content}
+                        { message.react && (<span className={classes.imageContainer}><img src={emoticons[message.react]} alt="" /></span>)}
+                    </p>
                     {toolboxOpened && isopenEditInput && (
                         <form className={classes.editMessageForm} onSubmit={handleEditSubmit}>
                             <input defaultValue={message.content} name="editedMessage" />

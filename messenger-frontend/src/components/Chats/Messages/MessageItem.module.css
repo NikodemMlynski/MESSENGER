@@ -25,6 +25,26 @@
     cursor: pointer;
     position: relative;
 }
+.friendMessage section .imageContainer , .yourMessage section p .imageContainer {
+    position: absolute;
+    bottom: -11px;
+    left: -5px;
+    width: 26px;
+    height: 26px;
+    background-color: #555;
+    box-shadow: 0 0 2px 1px #454545;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+.imageContainer img{
+    width: 22px;
+    height: 22px;
+}
+.friendMessage section .imageContainer {
+    right: -5px;
+}
 .editMessageForm {
     z-index: 99;
     width: 400px;
