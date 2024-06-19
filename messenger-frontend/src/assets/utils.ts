@@ -1,3 +1,5 @@
+import AppError from "../components/Errors/appError";
+
 export const URL = 'http://127.0.0.1:3000/';
 export function truncateString(str: string) {
     const maxLength = 20; // Maximum length allowed
@@ -28,4 +30,52 @@ export const months: string[]  = [
     'październik',
     'listopad',
     'grudzień'
-]
+];
+type IFetchError = {
+  message: string;
+  status: number;
+}
+export async function sendApiRequest(url: string, method: 'PATCH' | 'POST' | 'DELETE', token: string, potentialErrorMessage?: string, data?: any):
+ Promise<{data?: any, error: IFetchError}> {
+  try {
+    const response = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: data ? JSON.stringify(data) : undefined
+    });
+    if(!response.ok) throw new AppError(potentialErrorMessage || 'Request failed', response.status);
+    const responseData = await response.json();
+    return responseData;
+  } catch (error: any) {
+    return {
+      error: {
+        status: error?.statusCode || 500,
+        message: error?.message || 'Request failed',
+      }
+    }
+  }
+}
+
+// async function sendApiRequest(url: string, method: 'PATCH' | 'POST' | 'DELETE', data?: any): Promise<{ data?: any, error?: string }> {
+//   try {
+//     const response = await fetch(url, {
+//       method: method,
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: data ? JSON.stringify(data) : undefined,
+//     });
+
+//     if (!response.ok) {
+//       throw new Error('Request failed');
+//     }
+
+//     const responseData = await response.json();
+//     return { data: responseData };
+//   } catch (err) {
+//     return { error: err.message };
+//   }
+// }

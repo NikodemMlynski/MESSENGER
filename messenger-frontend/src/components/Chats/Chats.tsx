@@ -1,71 +1,85 @@
-import { FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useRef, useState } from "react";
 import IChat from "../../types/chatType";
 import { URL } from "../../assets/utils";
 import classes from './Chats.module.css';
 import ChatItem from "./ChatItem";
+import useFetch from "../../hooks/useFetch";
+import AppError from "../Errors/appError";
 
 const Chats: FC = () => {
-    const [chats, setChats] = useState<IChat[]>([]);
+    
     const loggedUser = JSON.parse(localStorage.getItem('authData') as string);
     const [searchUser, setSearchUser] = useState('');
-    const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+    const [searchTimeout, setSearchTimeout] = useState<number | null>(null);
+    const searchUserRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        async function getChats() {
-            const url = searchUser.trim().length > 0
-            ? `${URL}chats/users?username=${searchUser}`
-            : `${URL}chats/users`;
-            const res = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${loggedUser.token}`
-                }
-            });
-            if(!res.ok) throw new Error('Failed to fetch chats data');
-            const resData = await res.json();
-            console.log(resData);
-            console.log(resData.chats);
-            setChats(resData.chats);
-        }
-
-        // Używamy setTimeout, aby wykonać zapytanie po 1 sekundzie
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newSearchValue = event.target.value;
+    
+        // Clear any existing timeout
         if (searchTimeout) {
-            clearTimeout(searchTimeout);
+          clearTimeout(searchTimeout);
         }
-
+    
+        // Schedule a new timeout to update searchUser after 1 second
         const timeoutId = setTimeout(() => {
-            getChats();
+          setSearchUser(newSearchValue);
         }, 1000);
-
+    
+        // Update searchTimeout state with the new timeout ID
         setSearchTimeout(timeoutId);
-
-        // Czyszczenie timeoutu po unmount lub po zmianie searchUser
-        return () => {
-            if (searchTimeout) {
-                clearTimeout(searchTimeout);
+      };
+      
+    const {error, isFetching, fetchedData: chats} = useFetch<IChat[]>
+    (async () => {
+        const url = searchUser.trim().length > 0
+        ? `${URL}chats/users?username=${searchUser}`
+        : `${URL}chats/users`;
+        const res = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${loggedUser.token}`
             }
-        };
-    }, [searchUser]);
+        });
+        console.log(res);
+        if(!res.ok) throw new AppError('Failed to fetch chats', res.status);
+        const resData = await res.json();
+        return resData.chats;
+    }, [searchUser]
+    );
+
+
+    let content = <p>Loading...</p>;
+    if(isFetching) content = <p>Loading...</p>;
+    if(error){
+        console.log(error);
+        if(error.status === 404) content = <p>Chat not found</p>
+        else content = <p>{error.message}</p>
+    }
+    else content = <>
+    {
+        chats && chats.map(chat => (
+            <ChatItem 
+                key={chat._id} 
+                _id={chat._id} 
+                users={chat.users} 
+                lastMessage={chat.lastMessage} 
+            />
+        ))
+    }
+</>
 
     return (
         <aside className={classes.chats}>
             <input 
                 type="text" 
                 placeholder="Find chat" 
-                value={searchUser} 
-                onChange={(e) => setSearchUser(e.target.value)}
+                onChange={handleChange}
+                ref={searchUserRef}
             />
             <ul>
-                {
-                    chats.map(chat => (
-                        <ChatItem 
-                            key={chat._id} 
-                            _id={chat._id} 
-                            users={chat.users} 
-                            lastMessage={chat.lastMessage} 
-                        />
-                    ))
-                }
+            {content}
             </ul>
+            
         </aside>
     )
 }

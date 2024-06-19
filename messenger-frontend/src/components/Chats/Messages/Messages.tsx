@@ -4,6 +4,7 @@ import IMessage from "../../../types/messageType";
 import { URL } from "../../../assets/utils";
 import { ILoggedUser } from "../../../types/userType";
 import MessageItem from "./MessageItem";
+import useFetch from "../../../hooks/useFetch";
 
 interface MessagesProps {
     chatId: string;
@@ -19,7 +20,6 @@ interface IMessagesInChat {
 }
 
 const Messages: FC<MessagesProps> = ({ chatId }) => {
-    const scrollableRef = useRef<HTMLDivElement>(null);
     const [messagesForChat, setMessagesForChat] = useState<IMessage[]>([]);
     const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
     const [messageData, setMessageData] = useState({
@@ -47,42 +47,29 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
         const sortedMessages = sortMessagesByDate(allMessages);
         setMessagesForChat(sortedMessages);
     };
-    useEffect(() => {
-        const element = scrollableRef.current; // Get the element
-        if (element) {
-          // Ensure scroll height calculation happens after content loads
-          setTimeout(() => {
-            element.scrollTop = element.scrollHeight;
-          }, 0); // Schedule for next render cycle
-        }
-      }, [chatId, messagesForChat]);
-
-    useEffect(() => {
-        async function getMessagesForChat() {
-            if(!chatId) return;
-            const res = await fetch(`${URL}messages/chat/${chatId}`, {
-                headers: {
-                    'Authorization': `Bearer ${loggedUser.token}`
-                }
-            });
-            if (!res.ok) throw new Error('Failed to fetch messages for this chat');
-            const resData: IMessagesInChat = await res.json();
-            const findedReceiver = resData.users.find(u => u._id !== loggedUser.id);
-            setMessageData(prevState => ({
-                ...prevState,
-                receiver: findedReceiver
-                  ? { id: findedReceiver._id, username: findedReceiver.username }
-                  : { id: '', username: '' }, // Set default values if not found
-              }));
-            
-            const updatedYourMessages = resData.yourMessages.map(yMsg => {
-                yMsg['isYourMessage'] = true;
-                return yMsg;
-            });
-            
-            handleChangeMessages(updatedYourMessages, resData.friendMessages);
-        }
-        getMessagesForChat();
+    const {error, isFetching} = useFetch<IMessage[]>(async function getMessagesForChat() {
+        if(!chatId) return;
+        const res = await fetch(`${URL}messages/chat/${chatId}`, {
+            headers: {
+                'Authorization': `Bearer ${loggedUser.token}`
+            }
+        });
+        if (!res.ok) throw new Error('Failed to fetch messages for this chat');
+        const resData: IMessagesInChat = await res.json();
+        const findedReceiver = resData.users.find(u => u._id !== loggedUser.id);
+        setMessageData(prevState => ({
+            ...prevState,
+            receiver: findedReceiver
+              ? { id: findedReceiver._id, username: findedReceiver.username }
+              : { id: '', username: '' }, // Set default values if not found
+          }));
+        
+        const updatedYourMessages = resData.yourMessages.map(yMsg => {
+            yMsg['isYourMessage'] = true;
+            return yMsg;
+        });
+        
+        handleChangeMessages(updatedYourMessages, resData.friendMessages);
     }, [chatId, loggedUser.token]);
 
     const handleChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -132,6 +119,12 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             console.log(error);
         }
     }
+    let content;
+    if(isFetching) content = <p>Loading...</p>
+    if(error) content = <p>{error.message} - {error.status}</p>
+    else content = <>
+    {messagesForChat.map(message => <MessageItem onDeleteMessage={handleDeleteMessage} onEditMessage={handleEditMessage} key={message._id} message={message}/>)}
+    </>
     return (
         <main className={classes.messagesContainer}>
             <nav className={classes.nav}>
@@ -139,10 +132,10 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             </nav>
             <article className={classes.messages}>
                 {
-                    messagesForChat.map(message => <MessageItem onDeleteMessage={handleDeleteMessage} onEditMessage={handleEditMessage} key={message._id} message={message}/>)
+                    content
                 }
             </article>
-            <section className={classes.messageForm} ref={scrollableRef}>
+            <section className={classes.messageForm}>
                 <input type="text" placeholder="Aa" value={messageData.message} onChange={handleChangeMessage}/>
                 <button onClick={handleSendMessage}>Wyślij</button>
             </section>
