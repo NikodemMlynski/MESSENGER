@@ -1,10 +1,11 @@
-import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import classes from './Messages.module.css';
-import IMessage from "../../../types/messageType";
+import IMessage, { EmoticonType } from "../../../types/messageType";
 import { URL } from "../../../assets/utils";
 import { ILoggedUser } from "../../../types/userType";
 import MessageItem from "./MessageItem";
 import useFetch from "../../../hooks/useFetch";
+import AppError from "../../Errors/appError";
 
 interface MessagesProps {
     chatId: string;
@@ -47,21 +48,21 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
         const sortedMessages = sortMessagesByDate(allMessages);
         setMessagesForChat(sortedMessages);
     };
-    const {error, isFetching} = useFetch<IMessage[]>(async function getMessagesForChat() {
+    const {error, isFetching} = useFetch<IMessage[]>(async function () {
         if(!chatId) return;
         const res = await fetch(`${URL}messages/chat/${chatId}`, {
             headers: {
                 'Authorization': `Bearer ${loggedUser.token}`
             }
         });
-        if (!res.ok) throw new Error('Failed to fetch messages for this chat');
+        if (!res.ok) throw new AppError('Failed to fetch messages for this chat', res.status);
         const resData: IMessagesInChat = await res.json();
         const findedReceiver = resData.users.find(u => u._id !== loggedUser.id);
         setMessageData(prevState => ({
             ...prevState,
             receiver: findedReceiver
               ? { id: findedReceiver._id, username: findedReceiver.username }
-              : { id: '', username: '' }, // Set default values if not found
+              : { id: '', username: '' },
           }));
         
         const updatedYourMessages = resData.yourMessages.map(yMsg => {
@@ -70,11 +71,14 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
         });
         
         handleChangeMessages(updatedYourMessages, resData.friendMessages);
+        return updatedYourMessages;
+        
     }, [chatId, loggedUser.token]);
 
     const handleChangeMessage = (e: ChangeEvent<HTMLInputElement>) => {
         setMessageData(prevState => ({...prevState, ['message']: e.target?.value}));
     }
+    
     const handleSendMessage = () => {
         if(messageData.message.trim().length === 0) return;
         sendMessageDB(messageData.message, messageData.receiver.id);
@@ -103,6 +107,13 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             return [...prevState];
         })
     }
+    const handleReactOnMessage = (id: string, reactIcon: EmoticonType) => {
+        const messageIndex = messagesForChat.findIndex(m => m._id === id);
+        setMessagesForChat(prevState => {
+            prevState[messageIndex].react = reactIcon;
+            return [...prevState];
+        })
+    }
 
     const sendMessageDB = async (content: string, receiverId: string) => {
         try {
@@ -119,11 +130,12 @@ const Messages: FC<MessagesProps> = ({ chatId }) => {
             console.log(error);
         }
     }
+    console.log(messagesForChat);
     let content;
     if(isFetching) content = <p>Loading...</p>
     if(error) content = <p>{error.message} - {error.status}</p>
     else content = <>
-    {messagesForChat.map(message => <MessageItem onDeleteMessage={handleDeleteMessage} onEditMessage={handleEditMessage} key={message._id} message={message}/>)}
+    {messagesForChat.map(message => <MessageItem onDeleteMessage={handleDeleteMessage} onEditMessage={handleEditMessage} key={message._id} message={message} handleReactOnMessage={handleReactOnMessage}/>)}
     </>
     return (
         <main className={classes.messagesContainer}>

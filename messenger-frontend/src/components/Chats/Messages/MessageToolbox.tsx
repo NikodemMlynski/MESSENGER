@@ -5,15 +5,16 @@ import deleteIcon from './../../../images/delete.png';
 import emojiIcon from './../../../images/happy.png';
 import { URL } from "../../../assets/utils";
 import { ILoggedUser } from "../../../types/userType";
-type emoji = 'happy' | 'sad' | 'angry' | 'sigma';
+import { EmoticonType } from "../../../types/messageType";
 
 const MessageToolbox: FC<
     {
     messageId: string, isOpened: boolean,
     isYour: boolean,
     onDeleteMessage: (id: string) => void,
-    openInput: () => void
-    }> = ({messageId, isOpened, isYour, onDeleteMessage, openInput}) => {
+    openInput: () => void,
+    onReactOnMessage: (id: string, reactIcon: EmoticonType) => void
+    }> = ({messageId, isOpened, isYour, onDeleteMessage, openInput, onReactOnMessage}) => {
     const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
 
     const deleteMessage = async (id: string) => {
@@ -42,10 +43,11 @@ const MessageToolbox: FC<
         // trzeba jeszcze usunąć wiadomość na frontendzie po stronie klienta
         // I have to also delete message in frontend in client side
     }
-    const handleReact = (id: string, emojiType: emoji) => {
+    const handleReact = (id: string, emojiType: EmoticonType) => {
         react(id, emojiType);
+        onReactOnMessage(id, emojiType)
     }
-    const react = async (id: string, emojiType: emoji) => {
+    const react = async (id: string, emojiType: EmoticonType) => {
         try {
             const res = await fetch(`${URL}messages/${id}`, {
                 method: 'PATCH',

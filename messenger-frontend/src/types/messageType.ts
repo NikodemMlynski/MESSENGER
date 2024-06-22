@@ -1,4 +1,4 @@
-type EmoticonType = 'sad' | 'happy' | 'angry' | 'sigma';
+export type EmoticonType = 'sad' | 'happy' | 'angry' | 'sigma';
 
 interface IMessage {
     _id: string;

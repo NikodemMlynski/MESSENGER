@@ -1,5 +1,5 @@
 import { FC, FormEvent, useState } from "react";
-import IMessage from "../../../types/messageType";
+import IMessage, { EmoticonType } from "../../../types/messageType";
 import classes from './MessageItem.module.css';
 import { URL, months } from "../../../assets/utils";
 import MessageToolbox from "./MessageToolbox";
@@ -15,7 +15,12 @@ const emoticons = {
     angry: angryIcon,
     sigma: sigmaIcon
 }
-const MessageItem: FC<{message: IMessage; onDeleteMessage: (id: string) => void; onEditMessage: (id: string, content: string) => void }> = ({message, onDeleteMessage, onEditMessage}) => {
+const MessageItem: FC<{message: IMessage;
+    onDeleteMessage: (id: string) => void;
+    onEditMessage: (id: string, content: string) => void;
+    handleReactOnMessage: (id: string, reactIcon: EmoticonType) => void; 
+
+    }> = ({message, onDeleteMessage, onEditMessage, handleReactOnMessage}) => {
     {
         const [toolboxOpened, setToolboxOpened] = useState(false);
         const [isopenEditInput, setIsOpenEditInput] = useState(false);
@@ -72,7 +77,14 @@ const MessageItem: FC<{message: IMessage; onDeleteMessage: (id: string) => void;
                         </form>
                     )}
                     <span className={classes.date_span}><span>{` ${date} ${month}`}</span>{`${hours} : ${minutes}`}</span>
-                    <MessageToolbox openInput={handleOpenInput} onDeleteMessage={onDeleteMessage} messageId={message._id} isOpened={toolboxOpened} isYour={message.isYourMessage ?? false}/>
+                    <MessageToolbox
+                     openInput={handleOpenInput}
+                    onDeleteMessage={onDeleteMessage}
+                    messageId={message._id}
+                    isOpened={toolboxOpened}
+                    isYour={message.isYourMessage ?? false}
+                    onReactOnMessage={handleReactOnMessage}
+                         />
                 </section>
             </div>
         )
