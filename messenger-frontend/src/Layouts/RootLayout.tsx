@@ -2,17 +2,18 @@ import { FC, useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import user_photo from './../images/user-photo.png'
 import classses from './RootLayout.module.css';
+import { ILoggedUser } from "../types/userType";
 
 const RootLayout: FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const loggedUser = JSON.parse(localStorage.getItem('authData') as string);
+    const loggedUser: ILoggedUser = JSON.parse(localStorage.getItem('authData') as string);
     const [actualLoggedUser, setActualLoggeduser] = useState(loggedUser);
     
     useEffect(() => {
-        if(location.pathname === '/signup') return;
-        if(!loggedUser?.token){
+        if(!loggedUser?.token && !(location.pathname === '/signup') && !(location.pathname === '/signin')) {
             navigate('/signin');
+            // alert('robi sie');
         }else {
             setActualLoggeduser(loggedUser);
         }
@@ -38,7 +39,7 @@ const RootLayout: FC = () => {
                     </li>
                 </ul>
             </nav>
-            <Outlet/>
+            {!(!loggedUser?.token && !(location.pathname === '/signup') && !(location.pathname === '/signin')) && <Outlet/>}
            
         </div>
     )

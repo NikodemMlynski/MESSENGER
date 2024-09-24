@@ -2,6 +2,7 @@ import { FC, FormEvent } from "react";
 import InputContainer from "../../assets/InputContainer";
 import { URL } from "../../assets/utils";
 import classes from './SignUp.module.css';
+import { Link } from "react-router-dom";
 
 interface ISignUpUser {
     username: string;
@@ -59,6 +60,8 @@ const SignUp: FC = () => {
             <div>
                 <button>Submit</button>
             </div>
+        <p className={classes.link}>Already have account <Link to={'/signin'}>Sign up</Link></p>
+
         </form>
     )
 }

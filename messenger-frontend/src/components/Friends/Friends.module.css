@@ -1,7 +1,8 @@
 .main{
     display: flex;
     padding: 2rem 0.5rem;
-    gap: 1rem
+    gap: 1rem;
+    min-height: 90.74vh; 
 }
 .main section{
     width: 50%;

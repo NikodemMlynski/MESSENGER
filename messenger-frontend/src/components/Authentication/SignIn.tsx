@@ -2,7 +2,7 @@ import { FC, FormEvent } from "react";
 import InputContainer from "../../assets/InputContainer";
 import classes from './SignUp.module.css'
 import { URL } from "../../assets/utils";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 interface ISignedUser {
     email: string;
     password: string;
@@ -56,6 +56,7 @@ const SignIn: FC = () => {
         <div>
             <button>Submit</button>
         </div>
+        <p className={classes.link}>Not a member <Link to={'/signup'}>Sign up</Link></p>
     </form>
     )
 }
