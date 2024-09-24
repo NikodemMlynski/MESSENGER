@@ -19,3 +19,6 @@ The main goal of this project was to gain practical skills in creating full-fled
 ## Additional Information:
 
 First project using Typescript in React and Express projects: This repository is an excellent starting point for those who want to begin their journey with Typescript in web development projects.
+
+## Application View
+<img src="https://github.com/user-attachments/assets/20765bfc-0315-41d6-bc15-bb50612e464f" width"50%" height="50%">
