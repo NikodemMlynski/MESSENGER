@@ -1,20 +1,21 @@
-## Simple Copy of MESSENGER
+##Simple Copy of MESSENGER
+This project is an implementation of a simplified version of a Messenger-like application, created from scratch using the latest web technologies.
 
-Ten projekt to implementacja uproszczonej wersji aplikacji typu Messenger, stworzona od podstaw z wykorzystaniem najnowszych technologii webowych.
+##Technology:
 
-#Technologia:
-  -Frontend: React z Typescriptem zapewnia dynamiczny i skalowalny interfejs użytkownika. Biblioteka react-router-dom umożliwia łatwą nawigację pomiędzy różnymi widokami aplikacji, takimi jak ekran logowania, chaty czy profil użytkownika.
-  -Backend: Express z Typescriptem służy jako serwer aplikacji, obsługując żądania HTTP i komunikując się z bazą danych. Biblioteki takie jak bcrypt (hashowanie haseł), cors (obsługa żądań cross-origin), helmet (ochrona przed różnymi rodzajami ataków) oraz jsonwebtoken (autentykacja) zapewniają bezpieczeństwo aplikacji.
-  -Baza danych: MongoDB jako baza NoSQL została wybrana ze względu na elastyczność w przechowywaniu danych o różnym charakterze, takich jak użytkownicy, wiadomości i chaty.
-#Funkcjonalności:
-  -Autentykacja: Możliwość rejestracji nowych użytkowników oraz logowania istniejących.
-  -Chaty: Wyświetlanie listy chatów, tworzenie nowych chatów oraz udział w istniejących.
-  -Wiadomości: Wysyłanie wiadomości tekstowych, reagowanie na wiadomości za pomocą jednej emotki, edycja i usuwanie wiadomości.
-  -Wyszukiwanie użytkowników: Filtrowanie listy użytkowników po imieniu.
+Frontend: React with Typescript provides a dynamic and scalable user interface. The react-router-dom library enables easy navigation between different views of the application, such as the login screen, chats, and user profile.
+Backend: Express with Typescript serves as the application server, handling HTTP requests and communicating with the database. Libraries such as bcrypt (password hashing), cors (cross-origin requests), helmet (protection against various types of attacks), and jsonwebtoken (authentication) ensure the application's security.
+Database: MongoDB, as a NoSQL database, was chosen for its flexibility in storing various types of data, such as users, messages, and chats.
+##Features:
 
-#Cel projektu:
-Głównym celem tego projektu było zdobycie praktycznych umiejętności w zakresie tworzenia pełnoprawnych aplikacji webowych z wykorzystaniem nowoczesnych technologii, takich jak React, Typescript i Node.js. Projekt pozwolił na dogłębne zrozumienie mechanizmów działania aplikacji typu real-time, zarządzania stanem aplikacji oraz implementacji różnych strategii bezpieczeństwa.
+Authentication: Ability to register new users and log in existing ones.
+Chats: Displaying a list of chats, creating new chats, and participating in existing ones.
+Messages: Sending text messages, reacting to messages with a single emoji, editing, and deleting messages.
+User search: Filtering the list of users by name.
+##Project Goal:
 
-#Dodatkowe informacje:
-Pierwszy projekt z wykorzystaniem Typescripta w projektach React i Express: To repozytorium stanowi doskonały punkt odniesienia dla osób chcących rozpocząć swoją przygodę z Typescriptem w projektach webowych.
-Szczegółowa dokumentacja: (Jeśli masz stworzoną dokumentację) Dodatkowe informacje na temat architektury aplikacji, podejmowanych decyzji projektowych oraz użytych bibliotek.
+The main goal of this project was to gain practical skills in creating full-fledged web applications using modern technologies such as React, Typescript, and Node.js. The project allowed for a deep understanding of the mechanisms of real-time applications, application state management, and the implementation of various security strategies.
+
+Additional Information:
+
+First project using Typescript in React and Express projects: This repository is an excellent starting point for those who want to begin their journey with Typescript in web development projects.
